@@ -23,12 +23,20 @@ def index():
     app_ctx.pop()
 
     print app.url_map
+    flagArray = [1,2,3,4,5,6,7]
+    return render_template('home.html',flagArray=flagArray)
+@app.route('/sub')
+def subArticle():
+    return render_template('home_subArticle.html')
 
-    return '<h1>Hello Flask %s</h1>' % user_agent
+@app.route('/article')
+def showArticle():
+    return render_template('article.html')
 
 @app.route('/user/<name>')
 def user(name):
-    return render_template('user.html',name = name)
+    return render_template('user.html', name=name)
+
 
 @app.route('/aaa')
 def re():   #don't repeat name redirect that while cover this method in flask
