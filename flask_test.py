@@ -43,6 +43,9 @@ def re():   #don't repeat name redirect that while cover this method in flask
 
     return redirect('/')
 
+@app.route('/input')
+def input():
+    return render_template('post_article.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
