@@ -1,15 +1,46 @@
 {% extends "base.html" %}
 
 
-{% block content %}
-    <div class="input-group">
-      <div class="input-group-btn">
-          <a href="#" class="btn" role="button">B</a>
-          <a href="#" class="btn" role="button">I</a>
-          <a href="#" class="btn" role="button">H1</a>
-          <a href="#" class="btn" role="button">H2</a>
+   {% block styles %}
+        {{ super() }}
+        <style> body{background-color:#eeeeee} </style>
+        <style> .text-input{margin-top:20px} </style>
 
-      </div>
-      <input type="text" class="form-control" aria-label="...">
+    {% endblock %}
+    {% block scripts %}
+        {{ super() }}
+
+        <script>
+            $('.hr-btn').click(function(){
+                var $hr = $("<hr>");
+                var txt =document.createElement("hr");
+
+                $('.text-input').append(txt);
+            });
+            $('.image-btn').click(function(){
+                $('.text-input').append('image Button');
+            });
+        </script>
+    {% endblock %}
+
+{% block content %}
+    <div class="btn-group col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3" role="group">
+
+        <button type="button" class="btn b-btn  btn-default">B</button>
+        <button type="button" class="btn i-btn  btn-default">I</button>
+        <button type="button" class="btn h1-btn btn-default">H1</button>
+        <button type="button" class="btn h2-btn btn-default">H2</button>
+        <button type="button" class="btn h3-btn btn-default">H3</button>
+        <button type="button" class="btn h4-btn btn-default">H4</button>
+        <button type="button" class="btn image-btn btn-default">Image</button>
+        <button type="button" class="btn hr-btn btn-default">hr</button>
+
+    </div>
+
+    <div class="text-div col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+        <!--cols="30" <input type="text" class="form-control" height="80%" >-->
+        <!--<textarea class="text-input col-xs-12 col-lg-12 " name="input-area" id="" cols="100" rows="30"></textarea>-->
+        <div class="input text-input"></div>
+
     </div>
 {% endblock %}
