@@ -1,46 +1,32 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <title>Summernote</title>
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.7/summernote.css" rel="stylesheet">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.7/summernote.js"></script>
+</head>
+<body>
+  <div id="summernote"><p>Hello Summernote</p></div>
+  <div class="col-sm-offset-1 col-md-offset-1  col-lg-offset-1">
+      <button type="button" class="btn btn-large btn-primary submit">发布文章</button>
+  </div>
 
+  <script>
+    $(document).ready(function() {
 
-   {% block styles %}
-        {{ super() }}
-        <style> body{background-color:#eeeeee} </style>
-        <style> .text-input{margin-top:20px} </style>
+         $('.submit').click(function(){
 
-    {% endblock %}
-    {% block scripts %}
-        {{ super() }}
+                  var text1 = $('#summernote').summernote('code');
+                  alert(text1);
 
-        <script>
-            $('.hr-btn').click(function(){
-                var $hr = $("<hr>");
-                var txt =document.createElement("hr");
+          });
 
-                $('.text-input').append(txt);
-            });
-            $('.image-btn').click(function(){
-                $('.text-input').append('image Button');
-            });
-        </script>
-    {% endblock %}
-
-{% block content %}
-    <div class="btn-group col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3" role="group">
-
-        <button type="button" class="btn b-btn  btn-default">B</button>
-        <button type="button" class="btn i-btn  btn-default">I</button>
-        <button type="button" class="btn h1-btn btn-default">H1</button>
-        <button type="button" class="btn h2-btn btn-default">H2</button>
-        <button type="button" class="btn h3-btn btn-default">H3</button>
-        <button type="button" class="btn h4-btn btn-default">H4</button>
-        <button type="button" class="btn image-btn btn-default">Image</button>
-        <button type="button" class="btn hr-btn btn-default">hr</button>
-
-    </div>
-
-    <div class="text-div col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
-        <!--cols="30" <input type="text" class="form-control" height="80%" >-->
-        <!--<textarea class="text-input col-xs-12 col-lg-12 " name="input-area" id="" cols="100" rows="30"></textarea>-->
-        <div class="input text-input"></div>
-
-    </div>
-{% endblock %}
+        $('#summernote').summernote();
+    });
+  </script>
+</body>
+</html>
