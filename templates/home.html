@@ -136,44 +136,26 @@
 
         var arr = [], showNum = limit;
 
-        if (total - (currPage * limit) < 0) showNum = total - ((currPage - 1) * limit);
+            if (total - (currPage * limit) < 0) showNum = total - ((currPage - 1) * limit);
 
-        var mainObj = $('.subText');
+            var mainObj = $('.subText');
 
-        mainObj.empty();
+            mainObj.empty();
+            <!--mainObj.load("home_subArticle.html");-->
 
-        for (var i = 1; i <= showNum; i++) {
-              <!--arr.push('.');-->
+            for (var i = 1; i <= showNum; i++) {
 
-              <!--mainObj.load("home_subArticle.html");-->
-              mainObj.append('<div class="col-xs-6 col-lg-4">
+                  <!--mainObj.load("home_subArticle.html");-->
+                    $('.subText').append('<div class="col-xs-6 col-lg-4">'+
+                    '<div class="thumbnail">'+
+        '<a href="#"><img id="icon" src="../static/img/b.png" height="30%" width="100%" alt=""></a>'+
+        '<div class="caption"><span class="label label-success btn">Python</span><span class="help-block">2017.8.22</span>'+
+          '<h3>Thumbnail label</h3>'+
+          '<p>Donec id elit non mi porta gravida at eget metus. F</p>'+
+          '<p> <a href="/article" class="btn btn-primary" role="button">阅读全文</a></p>'+
+        '</div></div></div>');
 
-    <div class="thumbnail">
-        <a href="#">
-              <img id="icon" src="../static/img/b.png" height="30%" width="100%" alt="">
-        </a>
-
-
-        <div class="caption">
-            <span class="label label-success btn">Python</span>
-
-
-            <span class="help-block">2017.8.22</span>
-
-
-
-          <h3>Thumbnail label</h3>
-          <p>Donec id elit non mi porta gravida at eget metus. F</p>
-          <p>
-            <a href="/article" class="btn btn-primary" role="button">阅读全文</a>
-          </p>
-        </div>
-    </div>
-
-</div>');
-        }
-
-
+            }
 
          <!--$.ajax({-->
         <!--url: "home_subArticle.html",-->
@@ -196,5 +178,5 @@
 
 
     </script>
-    <script src="offcanvas.js"></script>
+    <!--<script src="offcanvas.js"></script>-->
 {% endblock %}
