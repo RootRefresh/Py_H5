@@ -207,7 +207,7 @@
                 var data = $.parseJSON(d);
 
             for(var i = 0; i < data.length; i++){
-                 if(i%2 == 0){
+                 <!--if(i%2 == 0){-->
 
                   $('.subText').append('<div class="col-xs-6 col-lg-4">'+
                     '<div class="thumbnail">'+
@@ -217,16 +217,16 @@
                     '<p>'+data[i].content+'</p>'+
                      '<p> <a href="/article" class="btn btn-primary" role="button">阅读全文</a></p>'+
                     '</div></div></div>');
-                 }else{
-                     $('.subText').append('<div class="col-xs-6 col-lg-4">'+
-                    '<div class="thumbnail">'+
-                    '<div class="caption"><span class="label label-success btn">'+data[i].tag+'</span><span class="help-block">'+data[i].time+'</span>'+
-                     '<h3>'+data[i].title+'</h3>'+
-                    '<p>'+data[i].content+'</p>'+
-                     '<p> <a href="/article" class="btn btn-primary" role="button">阅读全文</a></p>'+
-                    '</div></div></div>');
+                 <!--}else{-->
+                     <!--$('.subText').append('<div class="col-xs-6 col-lg-4">'+-->
+                    <!--'<div class="thumbnail">'+-->
+                    <!--'<div class="caption"><span class="label label-success btn">'+data[i].tag+'</span><span class="help-block">'+data[i].time+'</span>'+-->
+                     <!--'<h3>'+data[i].title+'</h3>'+-->
+                    <!--'<p>'+data[i].content+'</p>'+-->
+                     <!--'<p> <a href="/article" class="btn btn-primary" role="button">阅读全文</a></p>'+-->
+                    <!--'</div></div></div>');-->
 
-                 }
+                 <!--}-->
 
             }
 
