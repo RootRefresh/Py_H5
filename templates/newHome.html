@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    {{super()}}
+
+    <meta charset="utf-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+
+    <title>INSPINIA | Dashboard</title>
+
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+
+    <!--&lt;!&ndash; Toastr style &ndash;&gt;-->
+    <link href="../static/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+
+
+    <link href="../static/css/animate.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+    <!--<div class="container" >-->
+        <div class="row_cc">
+
+            <div class="col-xs-12 col-sm-4 col-lg-4 leftDiv">
+
+            <header id="header" class="inner">
+
+                <a href="/" class="profilepic">
+                    <img src="../static/img/ss.png" class="icon">
+                 </a>
+
+                <hgroup>
+                  <h1 class="author-name">Mr.Yang</h1>
+                </hgroup>
+
+                <p class="author-subtitle">人心浮躁，乱象丛生！戒骄戒躁，走向巅峰</p>
+
+                <div class="">
+
+                    <p class="btn btn-primary btn-sm category">算法&nbsp&nbsp&nbsp<span class="badge">10</span></p>
+                    <p class="btn btn-primary btn-sm category">iOS&nbsp&nbsp&nbsp<span class="badge">20</span></p>
+                  <p class="btn btn-primary btn-sm category">Python&nbsp&nbsp&nbsp<span class="badge">3</span></p>
+                  <p class="btn btn-primary btn-sm category">项目管理&nbsp&nbsp&nbsp<span class="badge">3</span></p>
+                  <p class="btn btn-primary btn-sm category">JS&nbsp&nbsp&nbsp<span class="badge">1</span></p>
+                  <p class="btn btn-primary btn-sm category">H5&nbsp&nbsp&nbsp<span class="badge">3</span></p>
+
+              </div>
+
+             </header>
+
+
+            </div>
+
+        <div class="col-xs-12 col-sm-8 col-lg-8 rightDiv">
+
+          <div class="row subText">
+
+              {% for x in articleArray %}
+
+              <div class="col-xs-12 col-sm-12 col-lg-12 home_subArticle">
+                  <div class="thumbnail">
+
+                    <div class="caption">
+                        <span class="label label-success btn">{{x['tag']}}</span>
+                        <span class="help-block">{{x['time']}}</span>
+                        <h3>{{x['title']}}</h3>
+                        <p>{{x['content']}}</p>
+                        <p>
+                            <a href="/article" class="btn btn-primary readAll" role="button">阅读全文</a>
+                        </p>
+                    </div>
+                  </div>
+
+              </div>
+
+
+              {% endfor %}
+
+          </div><!--/row-->
+
+            <div class="col-xs-12 col-sm-12 col-lg-12" id="callBackPager"></div>
+            <footer>
+                     <p>&copy; Company 2017 Bootstrap</p>
+            </footer>
+        </div><!--/.col-xs-12.col-sm-9-->
+
+        </div>
+{% endblock %}
+
+    <!--</div>-->
+{% block scripts %}
+    {{ super() }}
+    <!-- Mainly scripts -->
+    <script src="../static/js/extendPagination.js"></script>
+
+    <script>
+
+          $('#callBackPager').extendPagination({
+                  totalCount:20,
+                  showCount:3,
+                  limit:6,
+                  callback:function(curr,limit,total){
+                      createTable(curr,limit,total);
+                 }
+          });
+
+        function createTable(currPage, limit, total) {
+
+            var arr = [], showNum = limit;
+
+            if (total - (currPage * limit) < 0) showNum = total - ((currPage - 1) * limit);
+
+            var mainObj = $('.subText');
+
+            mainObj.empty();
+
+            $.get('/queryArticle',{id:'123'},function(d){
+                 console.log(data);
+
+                 var data = $.parseJSON(d);
+
+                 for(var i = 0; i < data.length; i++){
+
+                     $('.subText').append('<div class="col-xs-12 col-sm-12 col-lg-12">'+
+                    '<div class="thumbnail">'+
+                    '<div class="caption"><span class="label label-success btn">'+data[i].tag+'</span><span class="help-block">'+data[i].time+'</span>'+
+                     '<h3>'+data[i].title+'</h3>'+
+                    '<p>'+data[i].content+'</p>'+
+                     '<p> <a href="/article" class="btn btn-primary readAll" role="button">阅读全文</a></p>'+
+                    '</div></div></div>');
+                 }
+
+        });
+      }
+
+      $('.readAll').click(function () {
+            var tmp = $('.subText');
+            <!--$('#callBackPager').hidden;-->
+
+        });
+
+    </script>
+{% endblock %}

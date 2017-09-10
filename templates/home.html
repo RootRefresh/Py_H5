@@ -2,6 +2,24 @@
 
 {% block styles %}
     {{super()}}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>INSPINIA | Dashboard</title>
+
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Toastr style -->
+    <link href="../static/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <!-- Gritter -->
+    <link href="../static/js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+
+    <link href="../static/css/animate.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+
 <style>
     .thumbnail{box-shadow:1px 1px 3px  #DEDEDE;}
     .thumbnail:hover{box-shadow:-1px 3px 5px 3px #c4c4c4;
@@ -14,32 +32,45 @@
 
 {% block content %}
 
-    <div class="container">
+      <div class="row_cc row-offcanvas row-offcanvas-right">
 
-      <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-xs-12 col-sm-4 col-lg-4 leftDiv">
 
-        <div class="col-xs-12 col-sm-9 col-lg-9">
-          <p class="pull-right visible-xs">
-            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
-          </p>
+            <header id="header" class="inner">
 
-          <div class="jumbotron">
+                <a href="/" class="profilepic">
+                    <img src="../static/img/ss.png" class="icon">
+                 </a>
 
-            <h1>Mr.Yang</h1>
-              <p>个人技术博客，欢迎大家来交流</p>
+            <hgroup>
+              <h1 class="author-name">Mr.Yang</h1>
+            </hgroup>
 
+            <p class="author-subtitle">人心浮躁，乱象丛生！戒骄戒躁，走向巅峰</p>
+
+            <div class="">
+
+                <p class="btn btn-primary btn-sm category">算法&nbsp&nbsp&nbsp<span class="badge">10</span></p>
+                <p class="btn btn-primary btn-sm category">iOS&nbsp&nbsp&nbsp<span class="badge">20</span></p>
+              <p class="btn btn-primary btn-sm category">Python&nbsp&nbsp&nbsp<span class="badge">3</span></p>
+              <p class="btn btn-primary btn-sm category">项目管理&nbsp&nbsp&nbsp<span class="badge">3</span></p>
+              <p class="btn btn-primary btn-sm category">JS&nbsp&nbsp&nbsp<span class="badge">1</span></p>
+              <p class="btn btn-primary btn-sm category">H5&nbsp&nbsp&nbsp<span class="badge">3</span></p>
 
           </div>
+
+        </header>
+
+
+        </div>
+        <div class="col-xs-12 col-sm-8 col-lg-8 rightDiv">
 
           <div class="row subText">
 
               {% for x in articleArray %}
 
-              <div class="col-xs-6 col-lg-4 home_subArticle">
+              <div class="col-xs-12 col-sm-12 col-lg-12 home_subArticle">
                   <div class="thumbnail">
-                    <a href="#">
-                          <img id="icon" src="../static/img/ss.png" height="75%" width="100%" alt="">
-                    </a>
 
                     <div class="caption">
                         <span class="label label-success btn">{{x['tag']}}</span>
@@ -63,25 +94,6 @@
         </div><!--/.col-xs-12.col-sm-9-->
 
 
-         <!--<div class="col-xs-3 col-sm-3 col-lg-3 sidebar-offcanvas" id="sidebar">-->
-             <!--<div class="sidebar-module sidebar-module-inset">-->
-            <!--<h4>About</h4>-->
-            <!--<p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>-->
-          <!--</div>-->
-
-          <div class="sidebar-module">
-            <h4>分类</h4>
-
-              <a class="btn btn-primary category" href="#"><span class="cc">算法</span>&nbsp&nbsp&nbsp<span class="badge">4</span></a>
-              <a class="btn btn-primary category" href="#"><span class="cc">iOS</span>&nbsp&nbsp&nbsp<span class="badge">20</span></a><hr class="type_hr">
-              <a class="btn btn-primary category" href="#"><span class="cc">Python</span>&nbsp&nbsp&nbsp<span class="badge">3</span></a>
-              <a class="btn btn-primary category" href="#"><span class="cc">项目管理</span>&nbsp&nbsp&nbsp<span class="badge">3</span></a><hr class="type_hr">
-              <a class="btn btn-primary category" href="#"><span class="cc">JS</span>&nbsp&nbsp&nbsp<span class="badge">1</span></a>
-              <a class="btn btn-primary category" href="#"><span class="cc">H5</span>&nbsp&nbsp&nbsp<span class="badge">0</span></a><hr class="type_hr">
-
-          </div>
-
-
         </div><!--/.sidebar-offcanvas-->
 
 
@@ -93,8 +105,6 @@
       <footer>
         <p>&copy; Company 2014</p>
       </footer>
-
-    </div><!--/.container-->
 
 {% endblock %}
 
@@ -171,36 +181,6 @@
             var mainObj = $('.subText');
 
             mainObj.empty();
-
-
-            <!--for (var i = 1; i <= showNum; i++) {-->
-
-               <!--mainObj.append('<iframe src="home_subArticle.html .subArticle"></iframe>');-->
-
-
-
-                    <!--subHtml += '<div class="col-xs-6 col-lg-4">'+-->
-                    <!--'<div class="thumbnail">'+-->
-        <!--'<a href="#"><img id="icon" src="../static/img/b.png" height="30%" width="100%" alt=""></a>'+-->
-        <!--'<div class="caption"><span class="label label-success btn">Python</span><span class="help-block">2017.8.22</span>'+-->
-          <!--'<h3>Thumbnail label</h3>'+-->
-          <!--'<p>Donec id elit non mi porta gravida at eget metus. F</p>'+-->
-          <!--'<p> <a href="/article" class="btn btn-primary" role="button">阅读全文</a></p>'+-->
-        <!--'</div></div></div>'-->
-
-                    <!--mainObj.html(subHtml);-->
-
-                    <!--$('.subText').append('<div class="col-xs-6 col-lg-4">'+-->
-                    <!--'<div class="thumbnail">'+-->
-        <!--'<a href="#"><img id="icon" src="../static/img/b.png" height="30%" width="100%" alt=""></a>'+-->
-        <!--'<div class="caption"><span class="label label-success btn">Python</span><span class="help-block">2017.8.22</span>'+-->
-          <!--'<h3>Thumbnail label</h3>'+-->
-          <!--'<p>Donec id elit non mi porta gravida at eget metus. F</p>'+-->
-          <!--'<p> <a href="/article" class="btn btn-primary" role="button">阅读全文</a></p>'+-->
-        <!--'</div></div></div>');-->
-
-            <!--}-->
-
 
             $.get('/queryArticle',{id:'123'},function(d){
                  console.log(data);

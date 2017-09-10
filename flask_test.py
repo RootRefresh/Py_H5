@@ -60,7 +60,7 @@ def index():
     # print app.url_map
     flagArray = [1,2,3,4,5,6,7]
 
-    return render_template('home.html',articleArray=article)
+    return render_template('newHome.html',articleArray=article)
 
 @app.route('/queryArticle')
 def queryArticle():
