@@ -2,7 +2,7 @@
 # coding=utf-8
 # encoding:utf-8
 
-from flask import Flask, render_template, json
+from flask import Flask, render_template, json, url_for,send_file
 from flask import request
 from flask import current_app
 from flask import redirect
@@ -18,27 +18,33 @@ test = [{'time': '2017.7.1',
                 'tag':   unicode('Python人单独','utf8'),
                 'title': 'Python',
                 'content': 'ddddsss'}]
-article = [{'time': '2017.7.1',
+article = [{    'id'  : '1',
+                'time': '2017.7.1',
                 'tag': 'Python',
                 'title': unicode('Python入门','utf8'),
                 'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈','utf8')},
-               {'time': '2017.7.2',
+               {'id'  : '2',
+                'time': '2017.7.2',
                 'tag': 'Python',
                 'title': unicode('Python进阶','utf8'),
                 'content': unicode('这是个神奇的语言，进阶了阿萨法画江湖公交卡进度款','utf8')},
-               {'time': '2017.7.1',
+               {'id'  : '3',
+                'time': '2017.7.1',
                 'tag': 'iOS',
                 'title': unicode('iOS开发啊','utf8'),
                 'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈','utf8')},
-               {'time': '2017.7.1',
+               {'id'  : '4',
+                'time': '2017.7.1',
                 'tag': 'Python',
                 'title': unicode('Python入门','utf8'),
                 'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈','utf8')},
-               {'time': '2017.7.2',
+               {'id'  : '5',
+                'time': '2017.7.2',
                 'tag': 'Python',
                 'title': unicode('Python进阶','utf8'),
                 'content': unicode('这是个神奇的语言，进阶了阿萨法画江湖公交卡进度款','utf8')},
-               {'time': '2017.7.1',
+               {'id'  : '6',
+                'time': '2017.7.1',
                 'tag': 'iOS',
                 'title': unicode('iOS开发啊','utf8'),
                 'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈','utf8')}
@@ -89,7 +95,15 @@ def subArticle():
 
 @app.route('/article')
 def showArticle():
-    return render_template('article.html')
+
+    myID = request.values.get('id')
+
+
+    # articleContent = '<h1 class="blog-title">The Bootstrap Blog</h1>'
+    # return redirect(url_for(".article"))
+    # return send_file('/templates/article.html')
+    return render_template('article.html',myID = myID)
+
 
 @app.route('/user/<name>')
 def user(name):

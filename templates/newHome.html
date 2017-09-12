@@ -61,7 +61,7 @@
 
               {% for x in articleArray %}
 
-              <div class="col-xs-12 col-sm-12 col-lg-12 home_subArticle">
+              <div class="col-xs-12 col-sm-12 col-lg-12 home_subArticle" id="{{x['id']}}" >
                   <div class="thumbnail">
 
                     <div class="caption">
@@ -70,7 +70,7 @@
                         <h3>{{x['title']}}</h3>
                         <p>{{x['content']}}</p>
                         <p>
-                            <a href="/article" class="btn btn-primary readAll" role="button">阅读全文</a>
+                            <button class="btn btn-primary readAll" role="button">阅读全文</button>
                         </p>
                     </div>
                   </div>
@@ -119,18 +119,16 @@
             mainObj.empty();
 
             $.get('/queryArticle',{id:'123'},function(d){
-                 console.log(data);
-
                  var data = $.parseJSON(d);
 
                  for(var i = 0; i < data.length; i++){
 
-                     $('.subText').append('<div class="col-xs-12 col-sm-12 col-lg-12">'+
+                     $('.subText').append('<div class="col-xs-12 col-sm-12 col-lg-12" id='+"+ data[i].id+"+'>'+
                     '<div class="thumbnail">'+
                     '<div class="caption"><span class="label label-success btn">'+data[i].tag+'</span><span class="help-block">'+data[i].time+'</span>'+
                      '<h3>'+data[i].title+'</h3>'+
                     '<p>'+data[i].content+'</p>'+
-                     '<p> <a href="/article" class="btn btn-primary readAll" role="button">阅读全文</a></p>'+
+                     '<p> <button class="btn btn-primary readAll" role="button">阅读全文</button></p>'+
                     '</div></div></div>');
                  }
 
@@ -138,10 +136,19 @@
       }
 
       $('.readAll').click(function () {
-            var tmp = $('.subText');
-            <!--$('#callBackPager').hidden;-->
 
-        });
+          var myId = $(this).parents(".home_subArticle").attr('id');
+          alert(myId);
+          <!--console.log(myId);-->
+
+          location.href = "/article?id="+myId;
+
+          <!--$.get('/article',{id:myId},function(d) {-->
+
+          <!--});-->
+
+      });
+
 
     </script>
 {% endblock %}
