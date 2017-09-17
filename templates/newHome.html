@@ -9,7 +9,7 @@
 
     <title>INSPINIA | Dashboard</title>
 
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="../static/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="../static/css/style.css" rel="stylesheet">
 
     <!--&lt;!&ndash; Toastr style &ndash;&gt;-->
@@ -41,12 +41,12 @@
 
                 <div class="">
 
-                    <p class="btn btn-primary btn-sm category">算法&nbsp&nbsp&nbsp<span class="badge">10</span></p>
-                    <p class="btn btn-primary btn-sm category">iOS&nbsp&nbsp&nbsp<span class="badge">20</span></p>
-                  <p class="btn btn-primary btn-sm category">Python&nbsp&nbsp&nbsp<span class="badge">3</span></p>
-                  <p class="btn btn-primary btn-sm category">项目管理&nbsp&nbsp&nbsp<span class="badge">3</span></p>
-                  <p class="btn btn-primary btn-sm category">JS&nbsp&nbsp&nbsp<span class="badge">1</span></p>
-                  <p class="btn btn-primary btn-sm category">H5&nbsp&nbsp&nbsp<span class="badge">3</span></p>
+                    <p class="btn btn-primary btn-sm category"><span class="tag">算法&nbsp&nbsp&nbsp</span><span class="badge">10</span></p>
+                    <p class="btn btn-primary btn-sm category"><span class="tag">iOS&nbsp&nbsp&nbsp</span><span class="badge">20</span></p>
+                    <p class="btn btn-primary btn-sm category"><span class="tag">Python&nbsp&nbsp&nbsp</span><span class="badge">3</span></p>
+                    <p class="btn btn-primary btn-sm category"><span class="tag">项目管理&nbsp&nbsp&nbsp</span><span class="badge">3</span></p>
+                    <p class="btn btn-primary btn-sm category"><span class="tag">JS&nbsp&nbsp&nbsp</span><span class="badge">1</span></p>
+                    <p class="btn btn-primary btn-sm category"><span class="tag">H5&nbsp&nbsp&nbsp</span><span class="badge">3</span></p>
 
               </div>
 
@@ -86,7 +86,7 @@
             <footer>
                      <p>&copy; Company 2017 Bootstrap</p>
             </footer>
-        </div><!--/.col-xs-12.col-sm-9-->
+        </div><!--/.rightDiv-->
 
         </div>
 {% endblock %}
@@ -97,58 +97,6 @@
     <!-- Mainly scripts -->
     <script src="../static/js/extendPagination.js"></script>
 
-    <script>
+    <script src="../static/js/main.js"></script>
 
-          $('#callBackPager').extendPagination({
-                  totalCount:20,
-                  showCount:3,
-                  limit:6,
-                  callback:function(curr,limit,total){
-                      createTable(curr,limit,total);
-                 }
-          });
-
-        function createTable(currPage, limit, total) {
-
-            var arr = [], showNum = limit;
-
-            if (total - (currPage * limit) < 0) showNum = total - ((currPage - 1) * limit);
-
-            var mainObj = $('.subText');
-
-            mainObj.empty();
-
-            $.get('/queryArticle',{id:'123'},function(d){
-                 var data = $.parseJSON(d);
-
-                 for(var i = 0; i < data.length; i++){
-
-                     $('.subText').append('<div class="col-xs-12 col-sm-12 col-lg-12" id='+"+ data[i].id+"+'>'+
-                    '<div class="thumbnail">'+
-                    '<div class="caption"><span class="label label-success btn">'+data[i].tag+'</span><span class="help-block">'+data[i].time+'</span>'+
-                     '<h3>'+data[i].title+'</h3>'+
-                    '<p>'+data[i].content+'</p>'+
-                     '<p> <button class="btn btn-primary readAll" role="button">阅读全文</button></p>'+
-                    '</div></div></div>');
-                 }
-
-        });
-      }
-
-      $('.readAll').click(function () {
-
-          var myId = $(this).parents(".home_subArticle").attr('id');
-          alert(myId);
-          <!--console.log(myId);-->
-
-          location.href = "/article?id="+myId;
-
-          <!--$.get('/article',{id:myId},function(d) {-->
-
-          <!--});-->
-
-      });
-
-
-    </script>
 {% endblock %}

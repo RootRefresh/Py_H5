@@ -14,47 +14,64 @@ app = Flask(__name__)
 
 bootStrap = Bootstrap(app)
 
-test = [{'time': '2017.7.1',
+test = [{'id'  : '100',
+         'time': '2017.7.1',
                 'tag':   unicode('Python人单独','utf8'),
                 'title': 'Python',
                 'content': 'ddddsss'}]
-article = [{    'id'  : '1',
+article = [{    'id'  : '0',
                 'time': '2017.7.1',
                 'tag': 'Python',
                 'title': unicode('Python入门','utf8'),
-                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈','utf8')},
+                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈1','utf8')},
+
+              {    'id'  : '1',
+                'time': '2017.7.1',
+                'tag': 'Python',
+                'title': unicode('Python入门','utf8'),
+                'content': unicode('<h1><span style="background-color: rgb(255, 255, 255);">标题</span></h1><p>这是文章正文测试</p><pre>code在这里</pre><blockquote>引用在这</blockquote><p><br></p>','utf8')},
                {'id'  : '2',
                 'time': '2017.7.2',
                 'tag': 'Python',
                 'title': unicode('Python进阶','utf8'),
-                'content': unicode('这是个神奇的语言，进阶了阿萨法画江湖公交卡进度款','utf8')},
+                'content': unicode('这是个神奇的语言，进阶了阿萨法画江湖公交卡进度款3','utf8')},
                {'id'  : '3',
                 'time': '2017.7.1',
                 'tag': 'iOS',
                 'title': unicode('iOS开发啊','utf8'),
-                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈','utf8')},
+                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈iOS1111','utf8')},
                {'id'  : '4',
                 'time': '2017.7.1',
                 'tag': 'Python',
                 'title': unicode('Python入门','utf8'),
-                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈','utf8')},
+                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈55555','utf8')},
                {'id'  : '5',
                 'time': '2017.7.2',
                 'tag': 'Python',
                 'title': unicode('Python进阶','utf8'),
-                'content': unicode('这是个神奇的语言，进阶了阿萨法画江湖公交卡进度款','utf8')},
+                'content': unicode('这是个神奇的语言，进阶了阿萨法画江湖公交卡进度款6666','utf8')},
                {'id'  : '6',
                 'time': '2017.7.1',
                 'tag': 'iOS',
                 'title': unicode('iOS开发啊','utf8'),
-                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈','utf8')}
+                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈iOS22222','utf8')},
+               {'id': '7',
+                'time': '2017.7.1',
+                'tag': 'Python',
+                'title': unicode('Python入门', 'utf8'),
+                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈888', 'utf8')},
+               {'id': '8',
+                'time': '2017.7.1',
+                'tag': 'Python',
+                'title': unicode('Python入门', 'utf8'),
+                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈9999', 'utf8')},
                ]
 
 jsonData = json.dumps(article)
+jsonData2 = json.dumps(test)
 
 
 @app.route('/')
-
 def index():
     # user_agent = request.headers.get('User-Agent')
 
@@ -64,18 +81,62 @@ def index():
     # app_ctx.pop()
 
     # print app.url_map
-    flagArray = [1,2,3,4,5,6,7]
 
-    return render_template('newHome.html',articleArray=article)
+    tag = request.values.get('tag')
+
+    mArticle = []
+
+    if tag != None:
+
+        for m in article:
+
+            if (m['tag'] == tag):
+                print ('%s == %s', m['tag'], tag)
+
+                mArticle.append(m)
+        mArticle = mArticle[0:6]
+    else:
+        mArticle = article[0:6]
+
+    return render_template('newHome.html', articleArray=mArticle)
 
 @app.route('/queryArticle')
 def queryArticle():
 
+    mID = request.values.get('id')
 
-    return jsonData
+    currentPage = request.values.get('currPage')
+    currentPage = int(currentPage)
+    tag = request.values.get('tag')
 
-@app.route('/queryTag/<tag>')
-def queryArticleTag(tag):
+    mArticle = []
+
+    if tag == '':
+        # if len(article) > (currentPage-1)*6:
+        if (len(article)-(currentPage-1)*6) >= 6:
+            mArticle = article[(currentPage-1)*6:6]
+        else:
+            mArticle = article[(currentPage-1)*6:]
+
+        return json.dumps(mArticle)
+
+    else:
+        for m in article:
+            if m['tag'] == tag:
+                mArticle.append(m)
+        if (len(mArticle) - (currentPage-1)*6) >= 6:
+            mArticle = mArticle[(currentPage-1)*6:6]
+        else:
+            mArticle = mArticle[(currentPage-1)*6:]
+
+        return json.dumps(mArticle)
+
+@app.route('/queryTag')
+def queryArticleTag():
+
+    tag = request.values.get('tag')
+
+
     tagArticle = []
 
     for m in article:
@@ -84,6 +145,8 @@ def queryArticleTag(tag):
             print ('%s == %s', m['tag'], tag)
 
             tagArticle.append(m)
+
+
 
     jsonTagArticle = json.dumps(tagArticle)
 
@@ -97,13 +160,72 @@ def subArticle():
 def showArticle():
 
     myID = request.values.get('id')
+    mTag = request.values.get('tag')
+    result = []
+    for m in article:
+        if m['id'] == myID:
+            result = m
 
 
-    # articleContent = '<h1 class="blog-title">The Bootstrap Blog</h1>'
     # return redirect(url_for(".article"))
     # return send_file('/templates/article.html')
-    return render_template('article.html',myID = myID)
 
+    return render_template('article.html', article=result, mTag=mTag)
+
+@app.route('/articlePaging')
+def paging():
+
+    myID = request.values.get('id')
+
+    tag = request.values.get('tag')
+
+    isNext = bool(request.values.get('next'))
+
+    index = int(request.values.get('index'))
+
+
+
+    tmpArr = []
+
+    result = {}
+
+    if tag != '':
+
+        flag = 0
+        for m in article:
+            if m['tag'] == tag:
+                tmpArr.append(m)
+                if m['id'] == myID:
+                    if isNext:
+                      index = flag + 1
+                    else:
+                      index = flag - 1
+            flag += 1
+
+        if index < 0 | index > len(tmpArr):
+            return ''
+
+        result = tmpArr[index]
+
+    else:
+
+        if index < 0 or index > (len(article)-1):
+            return ''
+
+        result = article[index]
+        # flag = 0
+        # for m in article:
+        #     if m['id'] == myID:
+        #         if isNext:
+        #             flag += 1
+        #             break
+        #         else:
+        #             flag -= 1
+        #             break
+        #
+        # result = article[flag]
+
+    return json.dumps(result)
 
 @app.route('/user/<name>')
 def user(name):
