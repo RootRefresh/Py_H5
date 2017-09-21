@@ -15,52 +15,62 @@ app = Flask(__name__)
 bootStrap = Bootstrap(app)
 
 test = [{'id'  : '100',
+         'cid' : '100',
          'time': '2017.7.1',
                 'tag':   unicode('Python人单独','utf8'),
                 'title': 'Python',
                 'content': 'ddddsss'}]
 article = [{    'id'  : '0',
+                'cid'  : '0',
                 'time': '2017.7.1',
                 'tag': 'Python',
                 'title': unicode('Python入门','utf8'),
                 'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈1','utf8')},
 
               {    'id'  : '1',
+                'cid'  : '1',
                 'time': '2017.7.1',
                 'tag': 'Python',
                 'title': unicode('Python入门','utf8'),
                 'content': unicode('<h1><span style="background-color: rgb(255, 255, 255);">标题</span></h1><p>这是文章正文测试</p><pre>code在这里</pre><blockquote>引用在这</blockquote><p><br></p>','utf8')},
                {'id'  : '2',
+                'cid'  : '2',
                 'time': '2017.7.2',
                 'tag': 'Python',
                 'title': unicode('Python进阶','utf8'),
                 'content': unicode('这是个神奇的语言，进阶了阿萨法画江湖公交卡进度款3','utf8')},
                {'id'  : '3',
+                'cid'  : '0',
                 'time': '2017.7.1',
                 'tag': 'iOS',
                 'title': unicode('iOS开发啊','utf8'),
                 'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈iOS1111','utf8')},
                {'id'  : '4',
+                'cid'  : '3',
                 'time': '2017.7.1',
                 'tag': 'Python',
                 'title': unicode('Python入门','utf8'),
                 'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈55555','utf8')},
                {'id'  : '5',
+                'cid'  : '4',
                 'time': '2017.7.2',
                 'tag': 'Python',
                 'title': unicode('Python进阶','utf8'),
                 'content': unicode('这是个神奇的语言，进阶了阿萨法画江湖公交卡进度款6666','utf8')},
                {'id'  : '6',
+                'cid'  : '1',
                 'time': '2017.7.1',
                 'tag': 'iOS',
                 'title': unicode('iOS开发啊','utf8'),
                 'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈iOS22222','utf8')},
                {'id': '7',
+                'cid'  : '5',
                 'time': '2017.7.1',
                 'tag': 'Python',
                 'title': unicode('Python入门', 'utf8'),
                 'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈888', 'utf8')},
                {'id': '8',
+                'cid'  : '6',
                 'time': '2017.7.1',
                 'tag': 'Python',
                 'title': unicode('Python入门', 'utf8'),
@@ -86,7 +96,7 @@ def index():
 
     mArticle = []
 
-    if tag != None:
+    if tag != "" and tag != None:
 
         for m in article:
 
@@ -139,13 +149,16 @@ def queryArticleTag():
 
     tagArticle = []
 
-    for m in article:
+    if tag != '':
+        for m in article:
 
-        if(m['tag'] == tag):
-            print ('%s == %s', m['tag'], tag)
+            if(m['tag'] == tag):
+                print ('%s == %s', m['tag'], tag)
 
-            tagArticle.append(m)
+                tagArticle.append(m)
+    else:
 
+        tagArticle = article
 
 
     jsonTagArticle = json.dumps(tagArticle)
@@ -172,10 +185,23 @@ def showArticle():
 
     return render_template('article.html', article=result, mTag=mTag)
 
+@app.route('/queryCID')
+def queryCID():
+
+    mID = request.values.get('id')
+
+    result = {}
+
+    for m in article:
+        if m['id'] == mID:
+            result['cid'] = m['cid']
+
+    return json.dumps(result)
+
 @app.route('/articlePaging')
 def paging():
 
-    myID = request.values.get('id')
+    myCID = request.values.get('cid')
 
     tag = request.values.get('tag')
 
@@ -189,20 +215,20 @@ def paging():
 
     result = {}
 
-    if tag != '':
+    if tag != '' and tag != 'null':
 
-        flag = 0
+        # flag = 0
         for m in article:
             if m['tag'] == tag:
                 tmpArr.append(m)
-                if m['id'] == myID:
-                    if isNext:
-                      index = flag + 1
-                    else:
-                      index = flag - 1
-            flag += 1
+                # if m['cid'] == myCID:
+                #     if isNext:
+                #       index = flag + 1
+                #     else:
+                #       index = flag - 1
+            # flag += 1
 
-        if index < 0 | index > len(tmpArr):
+        if index < 0 or index > (len(tmpArr)-1):
             return ''
 
         result = tmpArr[index]

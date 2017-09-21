@@ -1,4 +1,13 @@
- var tag = '';
+
+        function GetQueryString(name)
+        {
+             var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+             var r = window.location.search.substr(1).match(reg);
+             if(r!=null)return  decodeURI(r[2]); return null;
+        }
+
+        var tag = '';
+
           $('#callBackPager').extendPagination({
                   totalCount:9,
                   showCount:3,
@@ -35,26 +44,17 @@
           });
         }
 
+
+
+
       $('.category').click(function () {
 
           tag = $(this).children('.tag').text();
 
           tag = $.trim(tag);
 
-          $.get('/queryTag',{tag:tag},function (d) {
+          queryTag(tag);
 
-              var data = $.parseJSON(d);
-              var rData;
-              if(data.length > 6)
-                 rData = data.slice(0,6);
-              else
-                 rData = data;
-
-              reloadArticle(rData);
-
-              segmentPage(data.length);
-
-          });
 
        });
 
@@ -82,11 +82,62 @@
       }
 
 
+      function queryTag(tag){
+
+          $.get('/queryTag',{tag:tag},function (d) {
+
+              var data = $.parseJSON(d);
+              var rData;
+              if(data.length > 6)
+                 rData = data.slice(0,6);
+              else
+                 rData = data;
+
+              reloadArticle(rData);
+
+              segmentPage(data.length);
+
+          });
+      }
+
+      function queryTag_read(tag){
+
+          $.get('/queryTag',{tag:tag},function (d) {
+
+              var data = $.parseJSON(d);
+//              var rData;
+//              if(data.length > 6)
+//                 rData = data.slice(0,6);
+//              else
+//                 rData = data;
+//
+//              reloadArticle(rData);
+
+              segmentPage(data.length);
+
+          });
+      }
+
+      $(document).ready(function () {
+         tag = GetQueryString('tag');
+
+         queryTag_read(tag);
+
+      });
+
       $(document).on("click","button",function () {
 
           var myId = $(this).parents(".home_subArticle").attr('id');
-          alert(myId);
 
-          location.href = "/article?tag="+tag+"&id="+myId;
+          $.get('/queryCID', {id:myId}, function(d){
+
+                var data = $.parseJSON(d);
+
+                location.href = "/article?tag="+tag+"&id="+myId+"&cid="+data.cid;
+
+
+          });
+
+
 
       });
