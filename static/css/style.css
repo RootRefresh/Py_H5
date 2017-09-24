@@ -6,6 +6,18 @@
  *   version 2.4
  *
 */
+
+.tag-label{float:left; }
+.time-label{float:right;
+            font-size:15px;}
+.title{ font-weight:500;
+        margin-top:30px;
+        margin-bottom:15px;}
+.main-sub-content{font-size:18px;
+                  font-weight:300;
+                  }
+
+.readAll{ margin-top:15px;}
 .thumbnail{box-shadow:1px 1px 3px  #DEDEDE;}
 .thumbnail:hover{box-shadow:-1px 3px 5px 3px #c4c4c4;
                      transition: box-shadow 0.3s ease-in-out;
