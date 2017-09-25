@@ -18,14 +18,94 @@
   <script>
     $(document).ready(function() {
 
-         $('.submit').click(function(){
+        var $summernote = $('#summernote').summernote({
+            height: 300,
+            minHeight: null,
+            maxHeight: null,
+            focus: true,
+            //调用图片上传
+            callbacks: {
+                onImageUpload: function (files) {
+                    sendFile($summernote, files[0]);
+                }
+            }
+        });
 
-                  var text1 = $('#summernote').summernote('code');
-                  alert(text1);
+        //ajax上传图片
+        function sendFile($summernote, file) {
+            var formData = new FormData();
+            formData.append("file", file);
+            $.ajax({
+                url: "",//{:U('Upload/upload_img')} 路径是你控制器中上传图片的方法，下面controller里面我会写到
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function (data) {
+                    $summernote.summernote('insertImage', data, function ($image) {
+                        $image.attr('src', data);
+                    });
+                }
+            });
+        }
 
-          });
-
-        $('#summernote').summernote();
+//         function postImage(data) {
+//             $.ajax({
+//                 data:data,
+//                 type:"POST",
+//                 url:"",
+//                 contentType:"json",
+//                 cache:false,
+//                 processData:false,
+//                 success:function (rData) {
+//                     alert(rData);
+//                     $('#summernote').summernote('editor.insertImage',"http://res.cloudinary.com/demo/image/upload/butterfly.jpg");
+//                     alert("success");
+//
+//                 },
+//                 error:function () {
+//                     alert("error");
+//                 }
+//             })
+//         }
+//
+//         function sendFile(file, editor, $editable){
+//             var fileName = false;
+//             try{
+//                 fileName = file['name'];
+//                 alert(fileName);
+//             }catch (e){
+//                 fileName = false;
+//             }
+//
+//             var data = new FormData();
+//
+//             data.append("TaskFile",file);
+//
+//             alert(data);
+//
+//             postImage(data);
+//
+//
+//         }
+//
+//         $('.submit').click(function(){
+//
+//                  <!--var text1 = $('#summernote').summernote('code');-->
+//                  <!--alert(text1);-->
+//                   $('#summernote').summernote({
+//                       lang:'zh-CN',
+//                       focus:true,
+//                       callbacks: {
+//                           onImageUpload: function (files, editor, $editable) {
+//                               sendFile(files[0], editor, $editable);
+//                           }
+//                       }
+//                   });
+//          });
+//
+//        $('#summernote').summernote();
     });
   </script>
 </body>
