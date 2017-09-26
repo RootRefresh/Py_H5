@@ -8,7 +8,7 @@ from flask import current_app
 from flask import redirect
 
 from flask_bootstrap import Bootstrap
-
+import mysql
 
 app = Flask(__name__)
 
@@ -252,6 +252,20 @@ def paging():
         # result = article[flag]
 
     return json.dumps(result)
+
+@app.route('/postArticle',methods=['GET','POST'])
+def postArticle():
+    print 'aaaaa#####'
+    data1 = request.get_json()
+    data = request.form.get('name')
+
+    db = mysql.Mysql()
+
+    data = ('1','2','3')
+
+    db.insertData('',data)
+
+    db.conn.close()
 
 @app.route('/user/<name>')
 def user(name):
