@@ -15,6 +15,9 @@
       <button type="button" class="btn btn-large btn-primary submit">发布文章</button>
   </div>
 
+  <script src="../static/js/jquery.base64.js"></script>
+  <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
+
   <script>
     $(document).ready(function() {
 
@@ -101,22 +104,48 @@
 
          }
 //
-//         $('.submit').click(function(){
+         $('.submit').click(function(){
+                  var text1 = $('#summernote').summernote('code');
+                  alert(text1);
+                  <!--text1 = $.base64.btoa(text1);-->
+                  text1 = md5(text1);
+                  alert(text1);
 
-                  <!--var text1 = $('#summernote').summernote('code');-->
-                  <!--alert(text1);-->
-                   $('#summernote').summernote({
-                       lang:'zh-CN',
-                       focus:true,
-                       callbacks: {
-                           onImageUpload: function (files, editor, $editable) {
-                               sendFile(files[0], editor, $editable);
-                           }
-                       }
-                   });
-//          });
+                  var tmp = {blog:text1};
+                  var obj = JSON.stringify(tmp);
 
-//        $('#summernote').summernote();
+               $.ajax({
+                 data:obj,
+                 type:"POST",
+                 url:"/postArticle",
+                 contentType: 'application/json; charset=UTF-8',
+                 dataType:"json",
+                 cache:false,
+                 processData:false,
+                 success:function (rData) {
+                     alert(rData);
+
+                     alert("success");
+
+                 },
+                 error:function () {
+                     alert("error");
+                 }
+             })
+
+                  //自动上传图片
+                   <!--$('#summernote').summernote({-->
+                       <!--lang:'zh-CN',-->
+                       <!--focus:true,-->
+                       <!--callbacks: {-->
+                           <!--onImageUpload: function (files, editor, $editable) {-->
+                               <!--sendFile(files[0], editor, $editable);-->
+                           <!--}-->
+                       <!--}-->
+                   <!--});-->
+          });
+
+       $('#summernote').summernote();
     });
   </script>
 </body>

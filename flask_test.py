@@ -180,6 +180,16 @@ def showArticle():
             result = m
 
 
+    db = mysql.Mysql()
+
+    db.searchData()
+
+    rData = db.cur.fetchall()
+
+    print  rData
+
+    db.conn.close()
+
     # return redirect(url_for(".article"))
     # return send_file('/templates/article.html')
 
@@ -257,13 +267,15 @@ def paging():
 def postArticle():
     print 'aaaaa#####'
     data1 = request.get_json()
-    data = request.form.get('name')
+    # data = request.form.get('blog')
+
+    blog = data1['blog']
 
     db = mysql.Mysql()
 
-    data = ('1','2','3')
+    data = ('1',blog)
 
-    db.insertData('',data)
+    db.insertData('blog_table',blog)
 
     db.conn.close()
 
