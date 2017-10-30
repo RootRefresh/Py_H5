@@ -3,14 +3,17 @@
 # encoding:utf-8
 
 from flask import Flask, render_template, json, url_for,send_file
-from flask import request
+from flask import request,jsonify
 from flask import current_app
 from flask import redirect
 
 from flask_bootstrap import Bootstrap
-import mysql
+import mysql,os,sys
+
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = sys.path[0]+os.sep+"static"+os.sep+'img'
+# sys.path[0]+os.sep+"static"+os.sep+'images'    //配置图片上传路径：./static/images/
 
 bootStrap = Bootstrap(app)
 
@@ -266,18 +269,26 @@ def paging():
 @app.route('/postArticle',methods=['GET','POST'])
 def postArticle():
     print 'aaaaa#####'
-    data1 = request.get_json()
+    # data = request.get_data()
+    # data1 = request.get_json()
     # data = request.form.get('blog')
 
-    blog = data1['blog']
+    # blog = data1['blog']
+    #
+    # db = mysql.Mysql()
+    #
+    # data = ('1',blog)
+    #
+    # db.insertData('blog_table',blog)
+    #
+    # db.conn.close()
 
-    db = mysql.Mysql()
-
-    data = ('1',blog)
-
-    db.insertData('blog_table',blog)
-
-    db.conn.close()
+    if 'image_up' not in request.files:
+        return jsonify(message='no pic')
+    file_metas = request.files['image_up']
+    filename = file_metas.filename
+    file_metas.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+    return jsonify(message='success',url = '../static/img/{0}'.format(filename))
 
 @app.route('/user/<name>')
 def user(name):
