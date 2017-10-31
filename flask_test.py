@@ -186,8 +186,15 @@ def showArticle():
     db = mysql.Mysql()
 
     db.searchData()
-
+    dic = {}
     rData = db.cur.fetchall()
+    for item in rData:
+        dic = {'m':item}
+    print rData
+    print dic['m']
+    print rData[0][1]
+    r = decode(rData[0][1])
+
 
     print  rData
 
@@ -196,7 +203,7 @@ def showArticle():
     # return redirect(url_for(".article"))
     # return send_file('/templates/article.html')
 
-    return render_template('article.html', article=result, mTag=mTag)
+    return render_template('article.html', article=r, mTag=mTag)
 
 @app.route('/queryCID')
 def queryCID():
@@ -265,30 +272,37 @@ def paging():
         # result = article[flag]
 
     return json.dumps(result)
-
-@app.route('/postArticle',methods=['GET','POST'])
-def postArticle():
-    print 'aaaaa#####'
-    # data = request.get_data()
-    # data1 = request.get_json()
-    # data = request.form.get('blog')
-
-    # blog = data1['blog']
-    #
-    # db = mysql.Mysql()
-    #
-    # data = ('1',blog)
-    #
-    # db.insertData('blog_table',blog)
-    #
-    # db.conn.close()
-
+@app.route('/uploadImage',methods=['GET','POST'])
+def uploadImage():
     if 'image_up' not in request.files:
         return jsonify(message='no pic')
     file_metas = request.files['image_up']
     filename = file_metas.filename
     file_metas.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
     return jsonify(message='success',url = '../static/img/{0}'.format(filename))
+def encode(s):
+    return ' '.join([bin(ord(c)).replace('0b', '') for c in s])
+
+def decode(s):
+    return ''.join([chr(i) for i in [int(b, 2) for b in s.split(' ')]])
+@app.route('/postArticle',methods=['GET','POST'])
+def postArticle():
+    print 'aaaaa#####'
+    # data = request.get_data()
+    data1 = request.get_json()
+    # data = request.form.get('blog')
+
+    blog = data1['blog']
+    blog = encode(blog)
+    db = mysql.Mysql()
+
+    data = ('1',blog)
+
+    db.insertData('blog_table',blog)
+
+    db.conn.close()
+
+
 
 @app.route('/user/<name>')
 def user(name):

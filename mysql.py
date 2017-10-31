@@ -7,7 +7,7 @@ class Mysql:
     host = 'localhost'
     port = 3306
     user = 'root'
-    pwd  = 'pinpin123'
+    pwd  = '123'
 
     def __init__(self):
 
