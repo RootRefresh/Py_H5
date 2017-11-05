@@ -1,0 +1,6 @@
+.title, .tag{
+    height: 50px;
+    width: 100%;
+    font-size: 30px;
+    font-weight: 600;
+}

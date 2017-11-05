@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Summernote</title>
+    <link href="../static/css/postArticle.css" rel="stylesheet">
   <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
   <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
@@ -10,6 +11,9 @@
   <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.7/summernote.js"></script>
 </head>
 <body>
+  <input class="title" type="text" placeholder="输入文章题目">
+  <input class="tag"   type="text" placeholder="添加tag标签">
+
   <div id="summernote"><p>Hello Summernote</p></div>
   <div class="col-sm-offset-1 col-md-offset-1  col-lg-offset-1">
       <button type="button" class="btn btn-large btn-primary submit">发布文章</button>
@@ -155,13 +159,16 @@
 //          });
 
         $('.submit').click(function () {
+
             var c = $('#summernote').summernote('code');
-            alert(c);
-            var tmp = {blog:c};
+            var title = $('.title').val();
+            var tag   = $('.tag').val();
+
+            var tmp = {title:title,tag:tag,blog:c};
             var jsonData = JSON.stringify(tmp);
             $.ajax({
                  data:jsonData,
-                 type:"POST",
+                 method:"POST",
                  url:"/postArticle",
                  contentType: 'application/json; charset=UTF-8',
                  dataType:"json",
@@ -176,8 +183,8 @@
                  error:function () {
                      alert("error!!");
                  }
-            })
-        })
+            });
+        });
 
        $('#summernote').summernote({
            height:400,                 // set editor height

@@ -15,16 +15,17 @@ class Mysql:
         self.conn.set_character_set('utf8')
         self.cur = self.conn.cursor()
 
-    def insertData(self, tableName, result):
+    # (id, cid, title,content, time, tag)
+    def insertArticle(self, tablename, result):
         try:
-            sql = 'insert into blog_table (blog_content)  VALUE ("%s") ' % result
+            sql = 'insert into blog_table(id, title, content, mtime, tag) VALUE (0,"%s","%s","%s","%s")' %  result
             self.cur.execute(sql)
             self.conn.commit()
         except MySQLdb.Error, e:
             print "Mysql Error %d: %s" % (e.args[0], e.args[1])
-    def searchData(self):
+    def selectAllFromTable(self,tableName):
         try:
-            sql = 'select * from blog_table '
+            sql = 'select * from %s', tableName
             self.cur.execute(sql)
             self.conn.commit()
         except MySQLdb.Error, e:

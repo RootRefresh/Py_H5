@@ -8,7 +8,7 @@ from flask import current_app
 from flask import redirect
 
 from flask_bootstrap import Bootstrap
-import mysql,os,sys
+import mysql,os,sys,time
 
 
 app = Flask(__name__)
@@ -288,21 +288,27 @@ def decode(s):
 @app.route('/postArticle',methods=['GET','POST'])
 def postArticle():
     print 'aaaaa#####'
+
+    nowTime = time.strftime('%Y.%m.%d %H:%M', time.localtime(time.time()))
+
     # data = request.get_data()
-    data1 = request.get_json()
     # data = request.form.get('blog')
 
-    blog = data1['blog']
-    blog = encode(blog)
+    data1 = request.get_json()
+
+    title = data1['title']
+    blog = encode(data1['blog'])
+    tag = data1['tag']
+
+    new_article = (title, blog, nowTime, tag)
+
     db = mysql.Mysql()
 
-    data = ('1',blog)
-
-    db.insertData('blog_table',blog)
+    db.insertArticle('blog_table', new_article)
 
     db.conn.close()
 
-
+    return 'success!!!!'
 
 @app.route('/user/<name>')
 def user(name):
