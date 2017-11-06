@@ -7,7 +7,8 @@ class Mysql:
     host = 'localhost'
     port = 3306
     user = 'root'
-    pwd  = '123'
+    pwd  = 'pinpin123'
+    # pwd  = '123'
 
     def __init__(self):
 
@@ -18,7 +19,7 @@ class Mysql:
     # (id, cid, title,content, time, tag)
     def insertArticle(self, tablename, result):
         try:
-            sql = 'insert into blog_table(id, title, content, mtime, tag) VALUE (0,"%s","%s","%s","%s")' %  result
+            sql = 'insert into blog (id, title, content, mtime, tag) VALUE (0,"%s","%s","%s","%s")' % result
             self.cur.execute(sql)
             self.conn.commit()
         except MySQLdb.Error, e:

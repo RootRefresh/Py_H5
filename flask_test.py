@@ -8,7 +8,7 @@ from flask import current_app
 from flask import redirect
 
 from flask_bootstrap import Bootstrap
-import mysql,os,sys,time
+import mysql,os,sys,time,data_controller
 
 
 app = Flask(__name__)
@@ -94,6 +94,8 @@ def index():
     # app_ctx.pop()
 
     # print app.url_map
+
+    # data_controller.searchArticleList()
 
     tag = request.values.get('tag')
 
@@ -196,7 +198,7 @@ def showArticle():
     r = decode(rData[0][1])
 
 
-    print  rData
+    print rData
 
     db.conn.close()
 
@@ -289,8 +291,6 @@ def decode(s):
 def postArticle():
     print 'aaaaa#####'
 
-    nowTime = time.strftime('%Y.%m.%d %H:%M', time.localtime(time.time()))
-
     # data = request.get_data()
     # data = request.form.get('blog')
 
@@ -298,13 +298,14 @@ def postArticle():
 
     title = data1['title']
     blog = encode(data1['blog'])
+    nowTime = time.strftime('%Y.%m.%d %H:%M', time.localtime(time.time()))
     tag = data1['tag']
 
     new_article = (title, blog, nowTime, tag)
 
     db = mysql.Mysql()
 
-    db.insertArticle('blog_table', new_article)
+    db.insertArticle('blog', new_article)
 
     db.conn.close()
 
