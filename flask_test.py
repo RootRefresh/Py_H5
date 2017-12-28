@@ -108,8 +108,8 @@ def index():
         rData = db.cur.fetchall()
 
         for item in rData:
-            content = decode(bin(item[5]))
-            desc    = decode(bin(item[2]))
+            content = decode(item[5])
+            desc    = item[2]
             dic = {'id':item[0],'title':item[1],'desc':desc,'time':item[3],'tag':item[4],'content':content,'cid':item[6]}
             nArticles.append(dic)
 
@@ -317,7 +317,7 @@ def postArticle():
 
     title = data1['title']
     blog = encode(data1['blog'])
-    info = encode(data1['info'])
+    info = data1['info']
     nowTime = time.strftime('%Y.%m.%d %H:%M', time.localtime(time.time()))
     tag = data1['tag']
 
