@@ -12,6 +12,7 @@
 </head>
 <body>
   <input class="title" type="text" placeholder="输入文章题目">
+  <input class="info"  type="text" placeholder="输入文章概述">
   <input class="tag"   type="text" placeholder="添加tag标签">
 
   <div id="summernote"><p>Hello Summernote</p></div>
@@ -163,8 +164,9 @@
             var c = $('#summernote').summernote('code');
             var title = $('.title').val();
             var tag   = $('.tag').val();
+            var info  = $('.info').val();
 
-            var tmp = {title:title,tag:tag,blog:c};
+            var tmp = {title:title, info:info, tag:tag, blog:c};
             var jsonData = JSON.stringify(tmp);
             $.ajax({
                  data:jsonData,

@@ -82,28 +82,44 @@ article = [{    'id'  : '0',
 
 jsonData = json.dumps(article)
 jsonData2 = json.dumps(test)
+firstEnter = 0
+nArticles = []
 
 
 @app.route('/')
 def index():
     # user_agent = request.headers.get('User-Agent')
-
     # app_ctx = app.app_context()
     # app_ctx.push()
     # print current_app.name
     # app_ctx.pop()
-
     # print app.url_map
-
     # data_controller.searchArticleList()
 
     tag = request.values.get('tag')
 
-    mArticle = []
+    mArticle  = []
+    global firstEnter
+    if firstEnter == 0:
+        db = mysql.Mysql()
+
+        db.executeSql('select * from bloglist')
+
+        rData = db.cur.fetchall()
+
+        for item in rData:
+            content = decode(bin(item[5]))
+            desc    = decode(bin(item[2]))
+            dic = {'id':item[0],'title':item[1],'desc':desc,'time':item[3],'tag':item[4],'content':content,'cid':item[6]}
+            nArticles.append(dic)
+
+        db.conn.close()
+
+    firstEnter += 1
 
     if tag != "" and tag != None:
 
-        for m in article:
+        for m in nArticles:
 
             if (m['tag'] == tag):
                 print ('%s == %s', m['tag'], tag)
@@ -111,7 +127,7 @@ def index():
                 mArticle.append(m)
         mArticle = mArticle[0:6]
     else:
-        mArticle = article[0:6]
+        mArticle = nArticles[0:6] #article[0:6]
 
     return render_template('newHome.html', articleArray=mArticle)
 
@@ -128,15 +144,15 @@ def queryArticle():
 
     if tag == '':
         # if len(article) > (currentPage-1)*6:
-        if (len(article)-(currentPage-1)*6) >= 6:
-            mArticle = article[(currentPage-1)*6:6]
+        if (len(nArticles)-(currentPage-1)*6) >= 6:
+            mArticle = nArticles[(currentPage-1)*6:6]
         else:
-            mArticle = article[(currentPage-1)*6:]
+            mArticle = nArticles[(currentPage-1)*6:]
 
         return json.dumps(mArticle)
 
     else:
-        for m in article:
+        for m in nArticles:
             if m['tag'] == tag:
                 mArticle.append(m)
         if (len(mArticle) - (currentPage-1)*6) >= 6:
@@ -151,11 +167,10 @@ def queryArticleTag():
 
     tag = request.values.get('tag')
 
-
     tagArticle = []
 
     if tag != '':
-        for m in article:
+        for m in nArticles:
 
             if(m['tag'] == tag):
                 print ('%s == %s', m['tag'], tag)
@@ -163,7 +178,7 @@ def queryArticleTag():
                 tagArticle.append(m)
     else:
 
-        tagArticle = article
+        tagArticle = nArticles
 
 
     jsonTagArticle = json.dumps(tagArticle)
@@ -180,32 +195,34 @@ def showArticle():
     myID = request.values.get('id')
     mTag = request.values.get('tag')
     result = []
-    for m in article:
-        if m['id'] == myID:
+
+    for m in nArticles:
+        if m['id'] == int(myID):
             result = m
+            break
 
 
-    db = mysql.Mysql()
-
-    db.searchData()
-    dic = {}
-    rData = db.cur.fetchall()
-    for item in rData:
-        dic = {'m':item}
-    print rData
-    print dic['m']
-    print rData[0][1]
-    r = decode(rData[0][1])
-
-
-    print rData
-
-    db.conn.close()
+    # db = mysql.Mysql()
+    #
+    # db.searchData()
+    # dic = {}
+    # rData = db.cur.fetchall()
+    #
+    # for item in rData:
+    #     dic = {'m':item}
+    # print rData
+    # print dic['m']
+    # print rData[0][1]
+    # r = decode(rData[0][1])
+    #
+    # print rData
+    #
+    # db.conn.close()
 
     # return redirect(url_for(".article"))
     # return send_file('/templates/article.html')
 
-    return render_template('article.html', article=r, mTag=mTag)
+    return render_template('article.html', article=result['content'], mTag=mTag)
 
 @app.route('/queryCID')
 def queryCID():
@@ -214,8 +231,8 @@ def queryCID():
 
     result = {}
 
-    for m in article:
-        if m['id'] == mID:
+    for m in nArticles:
+        if m['id'] == int(mID):
             result['cid'] = m['cid']
 
     return json.dumps(result)
@@ -240,7 +257,7 @@ def paging():
     if tag != '' and tag != 'null':
 
         # flag = 0
-        for m in article:
+        for m in nArticles:
             if m['tag'] == tag:
                 tmpArr.append(m)
                 # if m['cid'] == myCID:
@@ -257,10 +274,10 @@ def paging():
 
     else:
 
-        if index < 0 or index > (len(article)-1):
+        if index < 0 or index > (len(nArticles)-1):
             return ''
 
-        result = article[index]
+        result = nArticles[index]
         # flag = 0
         # for m in article:
         #     if m['id'] == myID:
@@ -287,6 +304,8 @@ def encode(s):
 
 def decode(s):
     return ''.join([chr(i) for i in [int(b, 2) for b in s.split(' ')]])
+
+
 @app.route('/postArticle',methods=['GET','POST'])
 def postArticle():
     print 'aaaaa#####'
@@ -298,17 +317,33 @@ def postArticle():
 
     title = data1['title']
     blog = encode(data1['blog'])
+    info = encode(data1['info'])
     nowTime = time.strftime('%Y.%m.%d %H:%M', time.localtime(time.time()))
     tag = data1['tag']
 
-    new_article = (title, blog, nowTime, tag)
-
     db = mysql.Mysql()
+    db.executeSql('select * from bloglist')
+
+    rData = db.cur.fetchall()
+
+    maxID  = 0
+    maxCID = 0
+    for item in rData:
+
+        if item[0] > maxID:
+            maxID = item[0]
+        if item[4] == tag:
+            if item[6] > maxCID:
+                 maxCID = item[6]
+
+
+    new_article = (maxID+1, maxCID+1, title, blog, info, nowTime, tag)
 
     db.insertArticle('blog', new_article)
 
     db.conn.close()
-
+    global firstEnter
+    firstEnter = 0
     return 'success!!!!'
 
 @app.route('/user/<name>')

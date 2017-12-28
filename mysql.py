@@ -19,7 +19,7 @@ class Mysql:
     # (id, cid, title,content, time, tag)
     def insertArticle(self, tablename, result):
         try:
-            sql = 'insert into blog (id, title, content, mtime, tag) VALUE (0,"%s","%s","%s","%s")' % result
+            sql = 'insert into bloglist (id, cid, title, content, summary, mtime, tag) VALUE ("%d","%d","%s","%s","%s","%s","%s")' % result
             self.cur.execute(sql)
             self.conn.commit()
         except MySQLdb.Error, e:
@@ -27,6 +27,20 @@ class Mysql:
     def selectAllFromTable(self,tableName):
         try:
             sql = 'select * from %s', tableName
+            self.cur.execute(sql)
+            self.conn.commit()
+        except MySQLdb.Error, e:
+            print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+
+    def searchData(self):
+        try:
+            sql = 'select * from blog'
+            self.cur.execute(sql)
+            self.conn.commit()
+        except MySQLdb.Error, e:
+            print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+    def executeSql(self,sql):
+        try:
             self.cur.execute(sql)
             self.conn.commit()
         except MySQLdb.Error, e:
