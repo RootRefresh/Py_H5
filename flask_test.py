@@ -10,81 +10,52 @@ from flask import redirect
 from flask_bootstrap import Bootstrap
 import mysql,os,sys,time,data_controller
 
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+
 app.config['UPLOAD_FOLDER'] = sys.path[0]+os.sep+"static"+os.sep+'img'
 # sys.path[0]+os.sep+"static"+os.sep+'images'    //配置图片上传路径：./static/images/
 
 bootStrap = Bootstrap(app)
 
-test = [{'id'  : '100',
-         'cid' : '100',
-         'time': '2017.7.1',
-                'tag':   unicode('Python人单独','utf8'),
-                'title': 'Python',
-                'content': 'ddddsss'}]
-article = [{    'id'  : '0',
-                'cid'  : '0',
-                'time': '2017.7.1',
-                'tag': 'Python',
-                'title': unicode('Python入门','utf8'),
-                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈1','utf8')},
-
-              {    'id'  : '1',
-                'cid'  : '1',
-                'time': '2017.7.1',
-                'tag': 'Python',
-                'title': unicode('Python入门','utf8'),
-                'content': unicode('<h1><span style="background-color: rgb(255, 255, 255);">标题</span></h1><p>这是文章正文测试</p><pre>code在这里</pre><blockquote>引用在这</blockquote><p><br></p>','utf8')},
-               {'id'  : '2',
-                'cid'  : '2',
-                'time': '2017.7.2',
-                'tag': 'Python',
-                'title': unicode('Python进阶','utf8'),
-                'content': unicode('这是个神奇的语言，进阶了阿萨法画江湖公交卡进度款3','utf8')},
-               {'id'  : '3',
-                'cid'  : '0',
-                'time': '2017.7.1',
-                'tag': 'iOS',
-                'title': unicode('iOS开发啊','utf8'),
-                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈iOS1111','utf8')},
-               {'id'  : '4',
-                'cid'  : '3',
-                'time': '2017.7.1',
-                'tag': 'Python',
-                'title': unicode('Python入门','utf8'),
-                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈55555','utf8')},
-               {'id'  : '5',
-                'cid'  : '4',
-                'time': '2017.7.2',
-                'tag': 'Python',
-                'title': unicode('Python进阶','utf8'),
-                'content': unicode('这是个神奇的语言，进阶了阿萨法画江湖公交卡进度款6666','utf8')},
-               {'id'  : '6',
-                'cid'  : '1',
-                'time': '2017.7.1',
-                'tag': 'iOS',
-                'title': unicode('iOS开发啊','utf8'),
-                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈iOS22222','utf8')},
-               {'id': '7',
-                'cid'  : '5',
-                'time': '2017.7.1',
-                'tag': 'Python',
-                'title': unicode('Python入门', 'utf8'),
-                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈888', 'utf8')},
-               {'id': '8',
-                'cid'  : '6',
-                'time': '2017.7.1',
-                'tag': 'Python',
-                'title': unicode('Python入门', 'utf8'),
-                'content': unicode('这是个神奇的语言，我们要哈哈哈学哈哈哈哈9999', 'utf8')},
-               ]
-
-jsonData = json.dumps(article)
-jsonData2 = json.dumps(test)
 firstEnter = 0
 nArticles = []
 
+#ORM
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:pinpin123@127.0.0.1:3306/test'
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+db = SQLAlchemy(app)
+
+class Blog(db.Model):
+    __tablename__ = 'bloglist'
+
+    # query = db_session.query_property()
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
+    summary = db.Column(db.TEXT)
+    mtime = db.Column(db.VARCHAR(100))
+    tag = db.Column(db.VARCHAR(45))
+    content = db.Column(db.TEXT)
+    cid = db.Column(db.Integer)
+
+    def __init__(self,id,title,summary,mtime,tag,content,cid):
+        self.id = id
+        self.title = title
+        self.summary = summary
+        self.mtime = mtime
+        self.tag = tag
+        self.content = content
+        self.cid = cid
+
+    # def __repr__(self):
+    #     return '<title %r>' % self.title
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
 @app.route('/')
 def index():
@@ -101,6 +72,22 @@ def index():
     mArticle  = []
     global firstEnter
     if firstEnter == 0:
+        del nArticles[:]
+
+        # db_session.create_all()
+        # one = Blog('4','tiel','info','2017','tag','content','cid')
+        # db_session.session.add(one)
+        # db_session.session.commit()
+
+        c = Blog.query.all()
+        print c
+
+        for blog in c :
+            print blog.title
+            print blog.content
+            print blog.summary
+            print blog.mtime
+            
         db = mysql.Mysql()
 
         db.executeSql('select * from bloglist')
